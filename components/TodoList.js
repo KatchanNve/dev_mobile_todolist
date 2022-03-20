@@ -13,7 +13,9 @@ export default function TodoList({navigation: { goBack }}){
     const [newTodoText,setNewTodoText] = useState("")
     const [showDoneItems,setShowDoneItems] = useState(false)
     const [showNotDoneItems,setShowNotDoneItems] = useState(false)
-    
+
+   // const[title,setTitle] = useState(route.params.title)
+
     const onChange = (state) => {
         if(state)
             setCount(count+1)

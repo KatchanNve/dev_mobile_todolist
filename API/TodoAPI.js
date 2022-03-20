@@ -32,6 +32,73 @@ const CREATE_TASKLIST =
     '    }\n' +
     '  }'
 
+
+    const DELETE_TASK_LIST =
+    'mutation($id:ID){\n'+
+   '     deleteTaskLists(where:{id:$id}){nodesDeleted}\n'+
+  '    }'
+
+  const CREATE_TASK = 'mutation($title:String,$content:String){\n'+
+        'createTasks(input:{\n'+
+           ' content:$content,\n'+
+           ' done:false,\n'+
+           ' belongsTo:{\n'+
+               ' connect:{\n'+
+                   ' where:{\n'+
+                       ' title:$title\n'+
+                  '  }\n'+
+              '  }\n'+
+         '   }\n'+
+      '  }\n'+
+       ' )\n'+
+       ' {\n'+
+           ' tasks{\n'+
+               ' id,\n'+
+             '   content,\n'+
+               ' done,\n'+
+               ' belongsTo{\n'+
+                '    id}\n'+
+               ' }\n'+
+           ' }\n'+
+       ' }'
+
+       const SHOW_TASK = 'query($title:String){tasks(where:{belongsTo:{title:$title}}){id,content,done}}'
+       const DELETE_TASK = 'mutation($id: ID) {deleteTasks(where: { id: $id }) {nodesDeleted}}'
+       const UPDATE_TASK = 'mutation($id:ID,$done : Boolean,$title : String){updateTasks(where : {id:$id,belongsTo : {title : $title}}update : {done : $done}){tasks{id,content,done}}}'
+       const UPDATE_TASK_CHECK_ALL = 'mutation($title : String){updateTasks(where : {belongsTo : {title : $title}}update : {done : true}){tasks{id,content,done}}}'
+
+       const UPDATE_TASK_CHECK_NONE = 'mutation($title : String){updateTasks(where : {belongsTo : {title : $title}}update : {done : false}){tasks{id,content,done}}}'
+
+
+
+export function deleteTaskLists (id,token) {
+    return fetch(API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+            query: DELETE_TASK_LIST,
+            variables: {
+                id:id
+            }
+        })
+    })
+        .then(response => {
+            return response.json()
+        })
+        .then(jsonResponse => {
+            if (jsonResponse.errors != null){
+                throw(jsonResponse.errors[0].message)
+            }
+            return jsonResponse.data
+        })
+        .catch(error => {
+            throw error
+        })
+}
+
 export function signIn (username, password) {
     return fetch(API_URL, {
         method: 'POST',
@@ -109,7 +176,7 @@ export function getTaskListsByUsername (username, token) {
             if (jsonResponse.errors != null){
                 throw(jsonResponse.errors[0].message)
             }
-            return jsonResponse.data
+            return jsonResponse.data.taskLists
         })
         .catch(error => {
             throw error
@@ -138,9 +205,184 @@ export function createTaskLists (username, token, title) {
             if (jsonResponse.errors != null){
                 throw(jsonResponse.errors[0].message)
             }
-            return jsonResponse.data
+            return jsonResponse.data.taskLists
         })
         .catch(error => {
             throw error
         })
 }
+
+
+export function createTask(title,content,token){
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization":"Bearer "+token
+      },
+      body: JSON.stringify({
+        query: CREATE_TASK,
+        variables: {
+          title: title,
+          content : content,
+        }
+      })
+    })
+        .then(response => {
+          return response.json()
+        })
+        .then(jsonResponse => {
+          if (jsonResponse.errors != null) {
+            throw jsonResponse.errors[0]
+          }
+          return jsonResponse.data.tasks
+        })
+        .catch(error => {
+          throw error
+        })
+  }
+
+  export function deleteTask(id,token){
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization":"Bearer "+token
+      },
+      body: JSON.stringify({
+        query: DELETE_TASK,
+        variables: {
+          id : id
+        }
+      })
+    })
+        .then(response => {
+          return response.json()
+        })
+        .then(jsonResponse => {
+          if (jsonResponse.errors != null) {
+            throw jsonResponse.errors[0]
+          }
+          return jsonResponse.data.tasks
+        })
+        .catch(error => {
+          throw error
+        })
+  }
+
+  export function showTask(title,token){
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization":"Bearer "+token
+      },
+      body: JSON.stringify({
+        query: SHOW_TASK,
+        variables: {
+          title:title,
+        }
+      })
+    })
+        .then(response => {
+          return response.json()
+        })
+        .then(jsonResponse => {
+          if (jsonResponse.errors != null) {
+            throw jsonResponse.errors[0]
+          }
+          return jsonResponse.data.tasks
+        })
+        .catch(error => {
+          throw error
+        })
+  }
+
+  
+export function updateTask(id,done,title,token){
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization":"Bearer "+token
+      },
+      body: JSON.stringify({
+        query: UPDATE_TASK,
+        variables: {
+          id : id,
+          done : done,
+          title:title
+        }
+      })
+    })
+        .then(response => {
+          return response.json()
+        })
+        .then(jsonResponse => {
+          if (jsonResponse.errors != null) {
+            throw jsonResponse.errors[0]
+          }
+          return jsonResponse.data.tasks
+        })
+        .catch(error => {
+          throw error
+        })
+  }
+  
+  export function updateTaskCheckAll(title,token){
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization":"Bearer "+token
+      },
+      body: JSON.stringify({
+        query: UPDATE_TASK_CHECK_ALL,
+        variables: {
+          title:title
+        }
+      })
+    })
+        .then(response => {
+          return response.json()
+        })
+        .then(jsonResponse => {
+          if (jsonResponse.errors != null) {
+            throw jsonResponse.errors[0]
+          }
+          return jsonResponse.data.tasks
+        })
+        .catch(error => {
+          throw error
+        })
+  }
+
+
+  
+export function updateTaskCheckNone(title,token){
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization":"Bearer "+token
+      },
+      body: JSON.stringify({
+        query: UPDATE_TASK_CHECK_NONE,
+        variables: {
+          title:title
+        }
+      })
+    })
+        .then(response => {
+          return response.json()
+        })
+        .then(jsonResponse => {
+          if (jsonResponse.errors != null) {
+            throw jsonResponse.errors[0]
+          }
+          return jsonResponse.data.tasks
+        })
+        .catch(error => {
+          throw error
+        })
+  }
