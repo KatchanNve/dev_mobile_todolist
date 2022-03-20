@@ -1,26 +1,32 @@
-import React, {useState} from "react";
-import { StyleSheet, View, TextInput, Button, Text, FlatList, Switch,ScrollView } from 'react-native';
+import React, {useState,useContext,useEffect} from "react";
+import { StyleSheet, View, TextInput, Button, Text, FlatList, Switch,ScrollView,Share } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import todoData from '../Helpers/todoData';
 import TodoItem from './TodoItem';
 import todoView from "./todoView";
+import { TokenContext } from "../Context/Context";
+import {createTask,
+    deleteTask,
+    showTask,
+    updateTaskCheckAll,
+    updateTaskCheckNone} from "../API/TodoAPI";
 
 export default function TodoList(props){
-    const [count,setCount] = useState(todoData.filter((item)=>item.done).length);
-    const [todos,setTodos] = useState(todoData);
-    const [countGlobal,setCountGlobal] = useState(todos.length)
+    const [count,setCount] = useState();
+    const [todos,setTodos] = useState(todos);
+    const [countGlobal,setCountGlobal] = useState()
     
     const [newTodoText,setNewTodoText] = useState("")
     const [showDoneItems,setShowDoneItems] = useState(false)
     const [showNotDoneItems,setShowNotDoneItems] = useState(false)
-    const a=props.navigation.getParent(todoView)
+    const [token,setToken] = useContext(TokenContext)
    
-    //const[title,setTitle] = useState(props.route.params.title)
+    const[title,setTitle] = useState(props.route.params.title)
 
 console.log("test"+JSON.stringify(props,null,2))
 console.log("test2"+JSON.stringify(props.route))
-console.log("ici          "+   props.navigation.getParent(todoView))
+console.log("voici mon title      "+title);
 
     const onChange = (state) => {
         if(state)
@@ -33,7 +39,14 @@ console.log("ici          "+   props.navigation.getParent(todoView))
         setCount(offset + count)
     }
     
-    
+    const showDataTask =()=>{
+        showTask(title,token).then(result =>setTodos(result))
+    }
+    useEffect(() =>{
+       showDataTask()
+    },[todos])
+
+    /*
     const checkAll = () => {
         setTodos(todos.map(item => {return {id: item.id, content: item.content, done: true }}))
         setCount(todos.length)
@@ -51,7 +64,7 @@ console.log("ici          "+   props.navigation.getParent(todoView))
         setCount(newTodos.filter(item=>item.done).length)
         setCountGlobal(todos.length)
     }
-    
+   
     const addNewTodo = () =>{
         setNewTodoText(newTodoText);
         setTodos([...todos, { id:  Math.max(...todos.map(item => item.id)) + 1, content: newTodoText, done: false }])
@@ -59,18 +72,34 @@ console.log("ici          "+   props.navigation.getParent(todoView))
         setCount(todos.filter(item=>item.done).length)
         setCountGlobal(todos.length)
     }
-    
-    
-    
+*/
+    const addNewTodo = () =>{
+        createTask(title,newTodoText,token)
+    }
+    const checkAll = () => {
+        updateTaskCheckAll(title,token)
+    }
+
+    const checkNone = () =>{
+        updateTaskCheckNone(title,token)
+    }
+
+    const deleteTodo = (id) => {
+        deleteTask(id,token)
+    }
+   
     
     return (
         <ScrollView>
+            <Text>Bienvenue dans votre todolist <Text style={{fontWeight:"bold"}}>{title}</Text></Text>
             <FlatList
                 style={{ paddingLeft: 10 }}
                 data={todos}
                 renderItem={({item}) => <TodoItem updateCount={updateCount}  todosNotDone = {showNotDoneItems} todosDone={showDoneItems} item={item} deleteTodo={deleteTodo} />}
             />
-            <Progress.Bar progress={count/countGlobal} width={1000} hight={20}/>
+            <Progress.Bar
+            style={{paddingBottom:20,paddingTop:20}}
+            progress={count/countGlobal} width={1000} hight={20}/>
            
             <View style={styles.button_container}>
                 <Button
@@ -99,6 +128,7 @@ console.log("ici          "+   props.navigation.getParent(todoView))
                 <Button
                     title="Back"
                     onPress={() => props.navigation.goBack()}/>
+                    
             </View>
         </ScrollView>
     )

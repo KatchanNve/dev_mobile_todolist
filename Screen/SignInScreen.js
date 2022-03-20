@@ -9,6 +9,8 @@ export default function SignInScreen ({ navigation }) {
     const [token, setToken] = useContext(TokenContext);
     const [username, setUsername] = useContext(UsernameContext);
     
+
+    
     return (
      
         <View style={{backgroundColor:"#F8B195",flex:1, 

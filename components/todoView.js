@@ -17,7 +17,7 @@ const todoView = (props) => {
              <View style={{flex:1}}>
                   <Button 
                   title={title} 
-                  onPress={() =>{ props.navigation.navigate('todolist'), {title:title} } }/>
+                  onPress={() =>{ props.navigation.navigate('todolist', {title:title} )} }/>
                        </View>
        <TouchableOpacity
        onPress={ () => props.deleteTaskLists(props.item.item.id,token) }  >
