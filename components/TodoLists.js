@@ -1,4 +1,4 @@
-import {Button, FlatList, View,Image,TouchableOpacity,ScrollView} from "react-native";
+import {Button, FlatList, View,Image,TouchableOpacity,ScrollView,ImageBackground} from "react-native";
 import {getTaskListsByUsername} from "../API/TodoAPI";
 import {useContext, useEffect, useState} from "react";
 import {TokenContext, UsernameContext} from "../Context/Context";
@@ -13,7 +13,7 @@ export default function TodoLists ({ navigation }) {
     const [token, setToken] = useContext(TokenContext);
     const [data, setData] = useState();
    
-    //useEffect( () => {getTaskListsByUsername(username, token).then(r => {setData(r.taskLists); console.log(r.taskLists)})}, []);
+   
     
     const showTodo = () =>{
         getTaskListsByUsername(username,token)
@@ -27,30 +27,27 @@ export default function TodoLists ({ navigation }) {
     
 
     return (
+       <ImageBackground
+       style={{flex:1}}
+       source={require('../assets/img/bleu.png')}
+       >
         <ScrollView>
+          
+
+            
             <FlatList
+            style={{backgroundColor:"`#6495ed",flex:1}}
                 data={data}
-                renderItem={(item) =>
+                renderItem={({item}) =>
                 
                       (<TodoView navigation={navigation} deleteTaskLists={deleteTaskLists}  item={item}/>)
-              
-            
-                /*
-
-                <View style={{ flex: 1, flexDirection: 'row' }}>
-                         <View style={{flex:1}}> 
-                         <Button title={item.title} 
-                                 onPress={() => {navigation.navigate('todolist'),{title:item.title}}}/></View>
-                   <TouchableOpacity
-                   onPress={ () => deleteTaskLists(item.id,token)}>
-                   <Image source={require('../assets/trash-can-outline.png')} style={{ height: 24, width: 24 }} />
-                   </TouchableOpacity>
-                </View>
-                */
+    
                 }
             />
             <Input/>
+           
         </ScrollView>
+        </ImageBackground>
     )
 }
 

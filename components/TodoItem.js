@@ -1,17 +1,21 @@
-import React, {useEffect, useState} from "react";
+
+import React, {useEffect, useState,useContext} from "react";
 import { Image, View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import { updateTask } from "../API/TodoAPI";
+import { TokenContext } from "../Context/Context";
 
 export default function TodoItem(props) {
     const [done, setDone] = useState(props.item.done);
-    
+    const [token,setToken] = useContext(TokenContext)
     const changeDone = (state) => {
         setDone(state)
         props.updateCount(state)
     }
-    
+    //console.log('titre ou pas ?'+JSON.stringify(props.item))
     
     useEffect(() => {
         changeDone(props.item.done)
+      //  updateTask(props.item.id ,done ,props.item.title,token )
     },[props.item.done])
     
     
