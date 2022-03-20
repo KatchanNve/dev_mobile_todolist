@@ -19,13 +19,7 @@ export default function Input(props) {
             <Button
                 onPress={ () =>
                     createTaskLists(username, token, text)
-                        .then(token => {
-                            setToken(token)
-                            setUsername(username)
-                        })
-                        .catch(err => {
-                            setError(err)
-                        })
+                      
                 }
                 title="Create"
             />
