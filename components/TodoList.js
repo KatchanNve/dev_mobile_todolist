@@ -4,6 +4,7 @@ import * as Progress from 'react-native-progress';
 
 import todoData from '../Helpers/todoData';
 import TodoItem from './TodoItem';
+import todoView from "./todoView";
 
 export default function TodoList(props){
     const [count,setCount] = useState(todoData.filter((item)=>item.done).length);
@@ -13,11 +14,13 @@ export default function TodoList(props){
     const [newTodoText,setNewTodoText] = useState("")
     const [showDoneItems,setShowDoneItems] = useState(false)
     const [showNotDoneItems,setShowNotDoneItems] = useState(false)
-
-   // const[title,setTitle] = useState(route.params.title)
+    const a=props.navigation.getParent(todoView)
+   
+    //const[title,setTitle] = useState(props.route.params.title)
 
 console.log("test"+JSON.stringify(props,null,2))
 console.log("test2"+JSON.stringify(props.route))
+console.log("ici          "+   props.navigation.getParent(todoView))
 
     const onChange = (state) => {
         if(state)

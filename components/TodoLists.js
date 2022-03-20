@@ -30,9 +30,9 @@ export default function TodoLists ({ navigation }) {
         <ScrollView>
             <FlatList
                 data={data}
-                renderItem={({item}) =>
+                renderItem={(item) =>
                 
-                      <TodoView navigation={navigation} deleteTaskLists={deleteTaskLists}  item={item}/>
+                      (<TodoView navigation={navigation} deleteTaskLists={deleteTaskLists}  item={item}/>)
               
             
                 /*

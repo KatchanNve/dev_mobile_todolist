@@ -1,5 +1,5 @@
-import {TokenContext, UsernameContext} from "../Context/Context";
-import {Button, View, TextInput, Text} from "react-native";
+import {TokenContext, UsernameContext,} from "../Context/Context";
+import {Button, View, TextInput, Text,ImageBackground} from "react-native";
 import React, {useContext} from "react";
 import {signIn} from "../API/TodoAPI";
 
@@ -10,21 +10,25 @@ export default function SignInScreen ({ navigation }) {
     const [username, setUsername] = useContext(UsernameContext);
     
     return (
-        <View>
+     
+        <View style={{backgroundColor:"#F8B195",flex:1, 
+        justifyContent: "center",
+        alignItems: "center",}}>
             <TextInput
-                //style={styles.input}
+                style={{borderRadius:20,padding:5}}
                 onChangeText={setUsername}
                 value={username}
                 placeholder={"username"}
             />
             <TextInput
-                //style={styles.input}
+                style={{margin:20,borderRadius:20,padding:5}}
                 onChangeText={setPassword}
                 value={password}
                 secureTextEntry={true}
                 placeholder="password"
             />
             <Button
+            
                 onPress={ () =>
                     signIn(username, password)
                         .then(t => {
@@ -40,6 +44,7 @@ export default function SignInScreen ({ navigation }) {
             />
             {error != null ? <Text>{error}</Text> : <Text/>}
         </View>
+        
     );
 }
 

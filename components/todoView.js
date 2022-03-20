@@ -5,7 +5,7 @@ import {TokenContext, UsernameContext} from "../Context/Context";
 
 const todoView = (props) => {
   const [token, setToken] = useContext(TokenContext);
-    const[title] = useState(props.item.title)
+    const[title] = useState(props.item.item.title)
 
     
 
@@ -17,11 +17,10 @@ const todoView = (props) => {
              <View style={{flex:1}}>
                   <Button 
                   title={title} 
-                  onPress={() =>{props.navigation.navigate('todolist'),{title:title}}
-                       }/>
+                  onPress={() =>{ props.navigation.navigate('todolist'), {title:title} } }/>
                        </View>
        <TouchableOpacity
-       onPress={ () => props.deleteTaskLists(props.item.id,token) }  >
+       onPress={ () => props.deleteTaskLists(props.item.item.id,token) }  >
        <Image source={require('../assets/trash-can-outline.png')} style={{ height: 24, width: 24 }} />
        </TouchableOpacity>
        
