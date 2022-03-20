@@ -32,21 +32,21 @@ export default function TodoLists ({ navigation, route }) {
                 data={data}
                 renderItem={({item}) =>
                 
-                      //<TodoView/>
+                      <TodoView navigation={navigation} deleteTaskLists={deleteTaskLists} item={item}/>
               
             
-                
+                /*
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                          <View style={{flex:1}}> 
                          <Button title={item.title} 
-                                 onPress={() => {navigation.navigate('todolist')}}/></View>
+                                 onPress={() => {navigation.navigate('todolist'),{title:item.title}}}/></View>
                    <TouchableOpacity
                    onPress={ () => deleteTaskLists(item.id,token)}>
                    <Image source={require('../assets/trash-can-outline.png')} style={{ height: 24, width: 24 }} />
                    </TouchableOpacity>
                 </View>
-                
+                */
                 }
             />
             <Input/>
