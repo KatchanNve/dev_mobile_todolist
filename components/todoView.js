@@ -8,11 +8,8 @@ const todoView = (props) => {
     const[title] = useState(props.item.title)
 
     
-console.log(props.navigation)
+
   return (
-   
-     
-     
       
     <View style={{ 
         flex: 1,flexDirection: 'row' }}>

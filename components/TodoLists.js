@@ -7,7 +7,7 @@ import { deleteTaskLists } from "../API/TodoAPI";
 import TodoView from "./todoView";
 import TodoItem from "./TodoItem";
 
-export default function TodoLists ({ navigation, route }) {
+export default function TodoLists ({ navigation }) {
     
     const [username, setUsername] = useContext(UsernameContext);
     const [token, setToken] = useContext(TokenContext);
@@ -32,7 +32,7 @@ export default function TodoLists ({ navigation, route }) {
                 data={data}
                 renderItem={({item}) =>
                 
-                      <TodoView navigation={navigation} deleteTaskLists={deleteTaskLists} item={item}/>
+                      <TodoView navigation={navigation} deleteTaskLists={deleteTaskLists}  item={item}/>
               
             
                 /*

@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import { StyleSheet, View, TextInput, Button, Text, FlatList, Switch } from 'react-native';
+import { StyleSheet, View, TextInput, Button, Text, FlatList, Switch,ScrollView } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import todoData from '../Helpers/todoData';
 import TodoItem from './TodoItem';
 
-export default function TodoList({navigation: { goBack }}){
+export default function TodoList(props){
     const [count,setCount] = useState(todoData.filter((item)=>item.done).length);
     const [todos,setTodos] = useState(todoData);
     const [countGlobal,setCountGlobal] = useState(todos.length)
@@ -16,6 +16,8 @@ export default function TodoList({navigation: { goBack }}){
 
    // const[title,setTitle] = useState(route.params.title)
 
+console.log("test"+JSON.stringify(props,null,2))
+console.log("test2"+JSON.stringify(props.route))
 
     const onChange = (state) => {
         if(state)
@@ -59,7 +61,7 @@ export default function TodoList({navigation: { goBack }}){
     
     
     return (
-        <View>
+        <ScrollView>
             <FlatList
                 style={{ paddingLeft: 10 }}
                 data={todos}
@@ -93,9 +95,9 @@ export default function TodoList({navigation: { goBack }}){
                     onPress={() => addNewTodo(newTodoText)}/>
                 <Button
                     title="Back"
-                    onPress={() => goBack()}/>
+                    onPress={() => props.navigation.goBack()}/>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({
